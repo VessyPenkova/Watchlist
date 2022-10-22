@@ -4,6 +4,6 @@ namespace Watchlist.Models
 {
     public class User: IdentityUser
     {
-        List<UserMovie> UsersMovies { get; set; } = new List<UserMovie>();
+      public   List<UserMovie> UsersMovies { get; set; } = new List<UserMovie>();
     }
 }

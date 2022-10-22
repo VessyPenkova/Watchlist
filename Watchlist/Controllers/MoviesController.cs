@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 using Watchlist.Contracts;
+using Watchlist.Models;
 
 namespace Watchlist.Controllers
 {
@@ -13,14 +16,62 @@ namespace Watchlist.Controllers
             this.movieService = _movieService;
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> All()
         {
             var model = await movieService.GetAllAsync();
 
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            var model = new AddMovieViewModel()
+            {
+                Genres = await movieService.GetGanresAsync()
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Add(AddMovieViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            try
+            {
+                await movieService.AddMoviesAsync(model);
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("","Something went wrond" );
+                return View(model);
+            }
+        }
+        public async Task<IActionResult> AddToCollection(int movieId)
+        {
+            try
+            {
+                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                await movieService.AddMovieToCollectionAsync(movieId, userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return RedirectToAction(nameof(All));
+        }
+
+        public async Task<IActionResult> Watched()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            var model = await movieService.GetWatchedAsync(userId);
+
+            return View("Watched", model);
         }
     }
 }

@@ -42,8 +42,11 @@ namespace Watchlist.Controllers
 
             if (result.Succeeded)
             {
-                await signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("All","Movies" );
+                //if the User is successfully registered
+                //and after need to be logged in stright away
+                //then use the code below:
+                //await signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Login","User" );
             }
 
             foreach (var item in result.Errors)
