@@ -7,7 +7,6 @@
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form method="post">
@@ -36,7 +35,7 @@
                 <select asp-for="@Model.GenreId" class="form-control">
                     @foreach (var genre in Model.Genres)
                     {
-                        <option value="@genre.Id">@genre.Name</option>
+                            <option value="@genre.Id">@genre.Name</option>
                     }
                 </select>
                 <span asp-validation-for="GenreId" class="text-danger"></span>
@@ -50,5 +49,5 @@
 
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+        <partial name="_ValidationScriptsPartial" />
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Watchlist.Data.Models;
 
 namespace Watchlist.Models
 {
@@ -13,7 +14,6 @@ namespace Watchlist.Models
         public string Director { get; set; }
 
         [Required]
-
         public string ImageUrl { get; set; }
 
         [Required]

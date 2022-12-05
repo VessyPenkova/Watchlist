@@ -1,7 +1,7 @@
-﻿using Microsoft.Build.Framework;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Watchlist.Models
+namespace Watchlist.Data.Models
 {
     public class UserMovie
     {
@@ -11,13 +11,11 @@ namespace Watchlist.Models
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
 
+        [Required]
         public int MovieId { get; set; }
 
         [ForeignKey(nameof(MovieId))]
-
         public Movie Movie { get; set; }
-
-
     }
 }
 
@@ -25,4 +23,3 @@ namespace Watchlist.Models
 //•	User – User
 //•	MovieId – an integer, Primary Key, foreign key (required)
 //•	Movie – Movie
-

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Watchlist.Models;
+using Watchlist.Data.Models;
 
 namespace Watchlist.Data
 {
@@ -10,13 +10,15 @@ namespace Watchlist.Data
             : base(options)
         {
         }
+
         public DbSet<Movie> Movies { get; set; }
+
         public DbSet<Genre> Genres { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             builder.Entity<UserMovie>()
-                .HasKey  (x=> new { x.UserId, x.MovieId});
+                .HasKey(x => new { x.UserId, x.MovieId });
 
             builder.Entity<User>()
                 .Property(u => u.UserName)
@@ -55,7 +57,7 @@ namespace Watchlist.Data
                     Id = 5,
                     Name = "Romantic"
                 });
-           
+
             base.OnModelCreating(builder);
         }
     }

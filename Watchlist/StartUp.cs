@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Watchlist.Contracts;
 using Watchlist.Data;
-using Watchlist.Models;
+using Watchlist.Data.Models;
 using Watchlist.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<WatchlistDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 
 
 builder.Services.AddDefaultIdentity<User>(options =>

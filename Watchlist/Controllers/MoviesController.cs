@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using Watchlist.Contracts;
 using Watchlist.Models;
@@ -11,9 +10,10 @@ namespace Watchlist.Controllers
     public class MoviesController : Controller
     {
         private readonly IMovieService movieService;
+
         public MoviesController(IMovieService _movieService)
         {
-            this.movieService = _movieService;
+            movieService = _movieService;
         }
 
         [HttpGet]
@@ -23,15 +23,18 @@ namespace Watchlist.Controllers
 
             return View(model);
         }
+
         [HttpGet]
         public async Task<IActionResult> Add()
         {
             var model = new AddMovieViewModel()
             {
-                Genres = await movieService.GetGanresAsync()
+                Genres = await movieService.GetGenresAsync()
             };
+
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Add(AddMovieViewModel model)
         {
@@ -39,17 +42,21 @@ namespace Watchlist.Controllers
             {
                 return View(model);
             }
+
             try
             {
-                await movieService.AddMoviesAsync(model);
+                await movieService.AddMovieAsync(model);
+
                 return RedirectToAction(nameof(All));
             }
             catch (Exception)
             {
-                ModelState.AddModelError("","Something went wrond" );
+                ModelState.AddModelError("", "Something went wrong");
+
                 return View(model);
             }
         }
+
         public async Task<IActionResult> AddToCollection(int movieId)
         {
             try
@@ -68,10 +75,17 @@ namespace Watchlist.Controllers
         public async Task<IActionResult> Watched()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-
             var model = await movieService.GetWatchedAsync(userId);
 
-            return View("Watched", model);
+            return View("Mine", model);
+        }
+
+        public async Task<IActionResult> RemoveFromCollection(int movieId)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            await movieService.RemoveMovieFromCollectionAsync(movieId, userId);
+
+            return RedirectToAction(nameof(Watched));
         }
     }
 }
